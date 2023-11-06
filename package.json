@@ -12,6 +12,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "firebase": "^10.5.2",
     "haversine": "^1.1.1",
     "leaflet": "^1.9.4",
     "mapbox-gl": "^2.15.0",

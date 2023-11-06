@@ -19,14 +19,19 @@ function App() {
         navigator.geolocation.clearWatch(geoWatchID);
       };
     }
+    else{
+      console.log("Геолока не надана");
+    }
   }, []);
 
   return (
     <div>
       <h1>My Location Map</h1>
       {lat !== 0 && lng !== 0 ? (
-        // <MyMap position={[lat, lng]} />
-        <MapWithMarkers position={[lat, lng]} />
+        <div>
+          <MapWithMarkers position={[lat, lng]} />
+        </div>
+        
       ) : (
         <div>Координати не знайдено</div>
       )}

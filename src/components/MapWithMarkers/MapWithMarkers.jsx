@@ -1,16 +1,19 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, Circle } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
+import './MapWithMarkers.css'
 
 const MapWithMarkers = ({ position }) => {
     const [destinationLocations, setDestinationLocations] = useState([]);
-    const [circleRadius, setCircleRadius] = useState(200);
-    const [seeCircle, setSeeCircle] = useState(false);
+    const [circleLocation, setCircleLocation] = useState(null);
+    const [centerField, setCenterField] = useState([49.190199, 16.593468]);
+    const [radiusField, setRadiusField] = useState(2000);
 
     useEffect(() => {
         setDestinationLocations([
             [49.194911, 16.573983],
             [49.189749, 16.601020],
+            // Додайте інші мітки сюди
         ]);
     }, []);
 
@@ -33,107 +36,82 @@ const MapWithMarkers = ({ position }) => {
         
         return distance;
     }
-    
-    const tesst = () => {
-        const distances = destinationLocations.map(destination => {
-            const distance = getDistance(position[0], position[1], destination[0], destination[1]);
-            return distance;
-        });
-    
-        const hasCloseDestination = distances.some(distance => distance < 0.30);
-    
-        setSeeCircle(hasCloseDestination);
-        console.log(distances);
-    }
-    
 
-    
-    const changeLocationRight = () => {
-        const locBuffer = destinationLocations.map(loc => {
-            const newLocation = [...loc]; // Створюємо копію розташування
-            newLocation[1] = newLocation[1] + 0.001;
-            return newLocation;
+    useEffect(() => {
+        let closestLocation = null;
+        let closestDistance = Infinity;
+
+        destinationLocations.forEach(destination => {
+            const distance = getDistance(position[0], position[1], destination[0], destination[1]);
+            if (distance < closestDistance) {
+                closestDistance = distance;
+                closestLocation = destination;
+            }
         });
-    
-        setDestinationLocations(locBuffer);
+
+        if (closestLocation && closestDistance < 0.20) {
+            setCircleLocation(closestLocation);
+        } else {
+            setCircleLocation(null);
+        }
+    }, [position, destinationLocations]);
+
+    const checkOutField = () =>{
+        const distance = getDistance(position[0], position[1], centerField[0], centerField[1]);
+        console.log("Дистанція", distance);
+
+        if(distance > radiusField/1000){
+            
+            console.log("ВИ НЕ В ЗОНІ");
+        }
     }
-    const changeLocationLeft = () => {
-        const locBuffer = destinationLocations.map(loc => {
-            const newLocation = [...loc]; // Створюємо копію розташування
-            newLocation[1] = newLocation[1] - 0.001;
-            return newLocation;
-        });
-    
-        setDestinationLocations(locBuffer);
-    }
-    
-    const changeLocationDown = () => {
-        const locBuffer = destinationLocations.map(loc => {
-            const newLocation = [...loc]; // Створюємо копію розташування
-            newLocation[0] = newLocation[0] - 0.001;
-            return newLocation;
-        });
-    
-        setDestinationLocations(locBuffer);
-    }
-    const changeLocationUp = () => {
-        const locBuffer = destinationLocations.map(loc => {
-            const newLocation = [...loc]; // Створюємо копію розташування
-            newLocation[0] = newLocation[0] + 0.001;
-            return newLocation;
-        });
-    
-        setDestinationLocations(locBuffer);
-    }
-    
+
+    useEffect(()=>{
+        checkOutField();
+    },[position])
 
     return (
         <div>
-            <div>                
-            <button onClick={changeLocationLeft}>Left</button>
-            <button onClick={changeLocationRight}>Right</button>
-            <button onClick={changeLocationUp}>Up</button>
-            <button onClick={changeLocationDown}>Down</button>
-            </div>
-            <button onClick={tesst}>Get Location</button>
-
+            {/* Ваші кнопки для зміни розташування тут */}
             <MapContainer center={position} zoom={13} style={{ height: '400px', width: '100%' }}>
                 <TileLayer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    // attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 />
                 <Marker position={position}>
                     <Popup>
                         Your Location
-                        {position.map((loc)=>(
-                                    <div key={loc}>{loc}</div>
-                                ))}
+                        {position.map((loc) => (
+                            <div key={loc}>{loc}</div>
+                        ))}
                     </Popup>
                 </Marker>
                 {destinationLocations.map((destination, index) => (
-                    seeCircle ? (
-                        <Circle key={index} center={destination} radius={circleRadius}>
+                    circleLocation && destination === circleLocation ? (
+                        <Circle key={index} center={destination} radius={200}>
                             <Popup>
-                                Position {destination.map((loc)=>(
+                                Position {destination.map((loc) => (
                                     <div key={loc}>{loc}</div>
                                 ))}
                             </Popup>
                         </Circle>
-                    ):(
-                        <Marker key={index} position={destination}>
-                            <Popup>
-                                Position {destination.map((loc)=>(
-                                    <div key={loc}>{loc}</div>
-                                ))}
-                            </Popup>
-                        </Marker>
+                    ) : (
+                        <div key={index}>
+                            {/* <Marker  position={destination}>
+                                <Popup>
+                                    Position {destination.map((loc) => (
+                                        <div key={loc}>{loc}</div>
+                                        </Popup>
+                                    ))}
+                            </Marker> */}
+                        </div>
                     )
-
-
                 ))}
+                <Circle center={centerField} radius={radiusField} className='field_circle'>
+                    
+                </Circle>
             </MapContainer>
         </div>
-
     );
 }
 
