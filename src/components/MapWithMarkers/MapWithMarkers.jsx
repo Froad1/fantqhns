@@ -3,11 +3,25 @@ import { MapContainer, TileLayer, Marker, Popup, Circle } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import './MapWithMarkers.css'
 
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/firestore';
+
 const MapWithMarkers = ({ position }) => {
     const [destinationLocations, setDestinationLocations] = useState([]);
     const [circleLocation, setCircleLocation] = useState(null);
     const [centerField, setCenterField] = useState([49.190199, 16.593468]);
     const [radiusField, setRadiusField] = useState(2000);
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBr9tJ_kpF95qefrcpchFBiV-wuxsacoGU",
+        authDomain: "fantqhns.firebaseapp.com",
+        projectId: "fantqhns",
+        storageBucket: "fantqhns.appspot.com",
+        messagingSenderId: "22208453528",
+        appId: "1:22208453528:web:3c6b75d06b8a1ccd6469ed",
+        measurementId: "G-JY768BVBB8"
+    };
+    firebase.initializeApp(firebaseConfig);
 
     useEffect(() => {
         setDestinationLocations([
@@ -15,6 +29,7 @@ const MapWithMarkers = ({ position }) => {
             [49.189749, 16.601020],
             // Додайте інші мітки сюди
         ]);
+        getPlayersPosition();
     }, []);
 
     function getDistance(lat1, lon1, lat2, lon2) {
@@ -69,6 +84,30 @@ const MapWithMarkers = ({ position }) => {
     useEffect(()=>{
         checkOutField();
     },[position])
+
+    const getPlayersPosition = () =>{
+        const db = firebase.firestore();
+        const docRef = db.collection('rooms').doc('I3wlVfp8cDjvxAjraQGc');
+    
+        const unsubscribe = docRef.onSnapshot((doc) => {
+          if (doc.exists) {
+            console.log(doc.data());
+            var locationsArray = [];
+            doc.data().users.map((user)=>{
+                var location = user.location
+                locationsArray.push([location.latitude, location.longitude])
+            })
+            setDestinationLocations(locationsArray);
+          } else {
+            console.log('Документ не існує');
+          }
+        });
+    
+        return () => {
+          // Прибрати підписку при виході з компоненти
+          unsubscribe();
+        };
+    }
 
     return (
         <div>
