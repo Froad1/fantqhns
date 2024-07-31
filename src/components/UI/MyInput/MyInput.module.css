@@ -1,0 +1,10 @@
+.input{
+    display: flex;
+    width: calc(100% - 3rem);
+    padding: 1.1875rem 1.4375rem;
+    align-items: center;
+    border-radius: 0.75rem;
+    background: #FFF;
+    box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.10) inset;
+    border: none;
+}

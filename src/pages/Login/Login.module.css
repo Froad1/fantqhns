@@ -1,4 +1,4 @@
-.home_page_container{
+.login_page_container{
     display: flex;
     height: 100vh;
     align-items: center;
@@ -17,3 +17,18 @@
         background: #FFF;
         box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.10);
     }
+        .google_svg{
+            height: 24px;
+            width: 24px;
+        }
+
+        .anonymous_svg{
+            height: 24px;
+            width: 24px;  
+        }
+
+        .back_icon{
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+        }

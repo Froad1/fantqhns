@@ -43,7 +43,10 @@ const AllRoomList = () => {
     return (
         <>
             {roomList.map((r)=>(
-                <Link to={`/room/${r}`} className={classes.room} key={r}>{r}</Link>
+                <div key={r} className={classes.rooms_container}>
+                    <div className={classes.dot}></div>
+                    <Link to={`/room/${r}`} className={classes.room}>{r}</Link>
+                </div>
             ))}
         </>
     );

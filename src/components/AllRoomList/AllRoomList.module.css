@@ -1,5 +1,16 @@
-.room{
-    cursor: pointer;
-    color: black;
-    text-decoration: none;
+.rooms_container{
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
 }
+.room{
+        cursor: pointer;
+        color: black;
+        text-decoration: none;
+    }
+        .dot{
+            width: .5rem;
+            height: .5rem;
+            background-color: chartreuse;
+            border-radius: 50%;
+        }

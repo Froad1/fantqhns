@@ -1,0 +1,48 @@
+.seeking_container{
+    display: flex;
+    align-items: center;
+    height: 100vh;
+}
+
+.field_circle{
+    fill: transparent;
+    stroke: #eb4034;
+}
+.warning_zone{
+    position: fixed;
+    display: flex;
+    height: 100vh;
+    width: 100%;
+    top: 0;
+    left: 0;
+    background: #ff4949b5;
+    z-index: 10000;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+    .timer{
+        position: fixed;
+        display: flex;
+        height: 100vh;
+        width: 100%;
+        top: 0;
+        left: 0;
+        background: #ff4949;
+        z-index: 10000;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+.back{
+    position: fixed;
+    top: 2rem;
+    left: 2rem;
+    background: white;
+    padding: 0.5rem;
+    border-radius: 0.7rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.10)   
+}
