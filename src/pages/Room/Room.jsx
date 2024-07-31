@@ -42,6 +42,7 @@ const Room = () => {
                 if(user.uid == 'PkwdudbBl2PMWHShdFZgPAgmEkN2'){
                     setAdmin(true);
                 }
+                else setAdmin(false);
             }
         })
     }, [])
@@ -93,14 +94,15 @@ const Room = () => {
 
             if(admin){
                 randomID = usersId[Math.floor(Math.random() * usersId.length)];
+                console.log(randomID);
+
+
+                docRef.update({
+                    seeking: randomID
+                })
             }
 
-            console.log(randomID);
 
-
-            docRef.update({
-                seeking: randomID
-            })
 
 
             var i = 10;
