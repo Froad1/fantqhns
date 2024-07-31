@@ -10,7 +10,7 @@ function App() {
   
   return (
     <div className='App'>
-      <Router basename={import.meta.env.DEV ? '/fantqhns' : '/fantqhns'}>
+      <Router basename={import.meta.env.DEV ? '/fantqhns' : '/fantqhns/'}>
         <Routes>
           <Route index element={<Home/>}/>
           <Route path='/login' element={<Login/>}/>
